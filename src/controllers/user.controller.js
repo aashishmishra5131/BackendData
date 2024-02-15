@@ -20,9 +20,7 @@ const registerUser =asyncHandler( async(req,res)=>{
 
 
      const {username, email, fullname, password}= req.body
-     console.log("email : ",email)
-     console.log("paasword : ",password)
-     console.log("username : ",username)
+     //console.log("email : ",email)
 //we check all field using if condition but here we use some different apporch , i am using array with .some() method which is check all field using single line of code.
 
      if([fullname,email,username,password].some((field)=>
@@ -30,21 +28,27 @@ const registerUser =asyncHandler( async(req,res)=>{
      ){
       throw new ApiError(400,"Alll fields are required")
      }
-     const existedUser=User.findOne({
+     const existedUser=await User.findOne({
       $nor:[{username},{email}]
      })
      if(existedUser){
       throw new ApiError(409,"User with email or username already exists")
      }
     const avatarLocalPath= req.files?.avatar[0]?.path;
-    const coverImageLocalPath=req.files?.coverImage[0]?.path;
+   // const coverImageLocalPath=req.files?.coverImage[0]?.path;
 
     if(!avatarLocalPath){
       throw new ApiError(400,"Avatar file is required")
     }
+    let coverImageLocalPath;
+    if(req.files && Array.isArray(req.files.coverImage)&&req.files.coverImage.length >0){
+         coverImageLocalPath=req.files.coverImage[0].path
+    }
 
     const avatar = await uploadOnCloudinary(avatarLocalPath)
     const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+    
+
     if(!avatar){
       throw new ApiError(400,"Avatar file is required")
     }

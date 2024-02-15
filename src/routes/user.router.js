@@ -13,7 +13,7 @@ const router =Router()
         maxCount:1
     },
        {
-         name: "coverImage0",
+         name: "coverImage",
          maxcount:1
        }
     ]),
