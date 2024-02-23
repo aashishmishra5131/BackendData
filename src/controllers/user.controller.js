@@ -4,6 +4,7 @@ import {User} from "../models/User.models.js"
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
+
 const generateAccessAndRefreshTokens = async(userId) =>{
   try {
       const user = await User.findById(userId)
@@ -20,7 +21,6 @@ const generateAccessAndRefreshTokens = async(userId) =>{
       throw new ApiError(500, "Something went wrong while generating referesh and access token")
   }
 }
-
 
 const registerUser =asyncHandler( async(req,res)=>{
       // res.status(200).json({
@@ -238,6 +238,7 @@ const getCurrentUser=asyncHandler(async(req,res)=>{
   .status(200)
   .json(200,req.user,"current user fetched successfully")
 })
+
 const updateAccountDetails=asyncHandler(async(req,res)=>{
   const {fullname,email}=req.body
   if(!fullname||!email){
@@ -421,8 +422,6 @@ const getWatchHistory=asyncHandler(async(req,res)=>{
    .status(200)
    .json(200, user[0].watchHistory,"Watch history fetched successfully")
 })
-
-
 
 export {
   registerUser,
